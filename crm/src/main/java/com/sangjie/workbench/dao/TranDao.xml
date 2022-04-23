@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sangjie.workbench.dao.TranDao">
+	<update id="changeStage">
+		update tbl_tran
+		set stage=#{stage},expectedDate=#{expectedDate},editBy=#{editBy},editTime=#{editTime}
+		where id=#{id}
+	</update>
+
+	<select id="getTranById" resultType="com.sangjie.workbench.domain.Tran">
+		select
+			t.id,
+			u.name as owner,
+			t.money,
+			t.name,
+			t.expectedDate,
+			c.name as customerId,
+			t.stage,
+			t.type,
+			t.source,
+			t.activityId,
+			c1.fullname as contactsId,
+			t.createBy,
+			t.createTime,
+			t.editBy,
+			t.editTime,
+			t.description,
+			t.contactSummary,
+			t.nextContactTime
+		from tbl_tran t
+		join tbl_user u
+		on t.owner=u.id
+		join tbl_customer c
+		on t.customerId=c.id
+		join tbl_contacts c1
+		on t.contactsId=c1.id
+		where t.id=#{id}
+	</select>
+    <insert id="save">
+        insert into tbl_tran (
+            id,
+	        owner,
+	        money,
+	        name,
+	        expectedDate,
+	        customerId,
+	        stage,
+	        type,
+	        source,
+	        activityId,
+	        contactsId,
+	        createBy,
+	        createTime,
+	        editBy,
+	        editTime,
+	        description,
+	        contactSummary,
+	        nextContactTime
+        ) values (
+            #{id},
+	        #{owner},
+	        #{money},
+	        #{name},
+	        #{expectedDate},
+	        #{customerId},
+	        #{stage},
+	        #{type},
+	        #{source},
+	        #{activityId},
+	        #{contactsId},
+	        #{createBy},
+	        #{createTime},
+	        #{editBy},
+	        #{editTime},
+	        #{description},
+	        #{contactSummary},
+	        #{nextContactTime}
+        )
+
+    </insert>
+</mapper>

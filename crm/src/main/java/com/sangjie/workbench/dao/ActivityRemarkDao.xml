@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sangjie.workbench.dao.ActivityRemarkDao">
+
+    <delete id="removeRemark">
+        delete from tbl_activity_remark where id=#{id};
+    </delete>
+
+    <select id="showRemarkList" resultType="com.sangjie.workbench.domain.ActivityRemark">
+        select *
+        from tbl_activity_remark where activityId=#{aid}
+    </select>
+
+    <select id="selectDeleteNums" resultType="int">
+        select count(*)
+        from tbl_activity_remark
+        where activityId in
+        <foreach collection="array" item="aid" open="(" close=")" separator=",">
+            #{aid}
+        </foreach>
+    </select>
+
+    <delete id="deleteNums">
+        delete from tbl_activity_remark
+        where activityId in
+        <foreach collection="array" item="aid" open="(" close=")" separator=",">
+            #{aid}
+        </foreach>
+    </delete>
+</mapper>

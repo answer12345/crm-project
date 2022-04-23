@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sangjie.workbench.dao.ClueRemarkDao">
+
+    <delete id="delete">
+        delete from tbl_clue_remark where id=#{clueRemarkId}
+    </delete>
+
+    <delete id="deleteByClueId">
+        delete from tbl_clue_remark where clueId=#{clueId}
+    </delete>
+
+    <select id="query" resultType="com.sangjie.workbench.domain.ClueRemark">
+        select * from tbl_clue_remark where clueId=#{clueId}
+    </select>
+
+    <select id="showRemark" resultType="com.sangjie.dto.ClueRemarkAndClueDto">
+        select
+            t.id,
+            t.noteContent,
+            t.createBy,
+            t.createTime,
+            t.editBy,
+            t.editTime,
+            t.editFlag,
+            c.fullname,
+            c.appellation,
+            c.company
+        from tbl_clue c
+        join tbl_clue_remark t
+        on c.id=t.clueId
+        where c.id=#{clueId}
+    </select>
+</mapper>

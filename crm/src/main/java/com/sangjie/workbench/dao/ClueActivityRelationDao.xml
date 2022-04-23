@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sangjie.workbench.dao.ClueActivityRelationDao">
+
+    <insert id="bund">
+        insert into tbl_clue_activity_relation (
+            id,
+            activityId,
+            clueId
+        ) values (
+            #{id},
+            #{activityId},
+            #{clueId}
+        )
+    </insert>
+
+    <select id="getActivityListAndNoRelation" resultType="com.sangjie.workbench.domain.Activity">
+        select
+        a.id,
+        u.name as owner,
+        a.name,
+        a.startDate,
+        a.endDate
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+        where a.name like '%' #{aname} '%'
+        and a.id not in (
+            select
+            activityId
+            from tbl_clue_activity_relation
+            where clueId=#{clueId}
+        )
+    </select>
+
+    <select id="getById" resultType="com.sangjie.workbench.domain.ClueActivityRelation">
+        select
+        id,
+        activityId,
+        clueId
+        from tbl_clue_activity_relation
+        where clueId=#{clueId}
+    </select>
+
+    <delete id="delete">
+        delete from tbl_clue_activity_relation where id=#{id}
+    </delete>
+
+    <select id="showActivityList" resultType="com.sangjie.workbench.domain.Activity">
+        select
+            t.id,
+            u.name as owner,
+            t.name,
+            t.startDate,
+            t.endDate,
+            t.cost,
+            t.description,
+            t.createTime,
+            t.createBy,
+            t.editTime,
+            t.editBy
+        from (select
+            r.id,
+            a.owner,
+            a.name,
+            a.startDate,
+            a.endDate,
+            a.cost,
+            a.description,
+            a.createTime,
+            a.createBy,
+            a.editTime,
+            a.editBy
+        from tbl_clue_activity_relation r
+        join tbl_activity a
+        on r.activityId=a.id
+        where r.clueId=#{clueId}) t
+        join tbl_user u
+        on t.owner=u.id
+    </select>
+</mapper>
